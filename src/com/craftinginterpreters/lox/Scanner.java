@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import static com.craftinginterpreters.lox.TokenType.*;
 
@@ -82,6 +83,9 @@ class Scanner {
                     // 当已经碰到换行符时不会运行advance
                     // 因此可以被下一次scanToken中的case '\n'处理
                     while (peek() != '\n' && !isAtEnd()) advance();
+                } else if (match('*')) {
+                    // 支持c语言风格的多行注释
+                    comment();
                 } else {
                     addToken(SLASH);
                 }
@@ -107,6 +111,33 @@ class Scanner {
                     Lox.error(line, "Unexpected character.");
                 }
                 break;
+        }
+    }
+
+    private void comment() {
+        // 用栈来处理嵌套注释
+        Stack<Character> s = new Stack<>();
+        s.push('c');
+
+        while (!s.empty() && !isAtEnd()) {
+            if (peek() == '\n') {
+                line++;
+                advance();
+            } else if (peek() == '*' && peekNext() == '/') {
+                s.pop();
+                advance();
+                advance();
+            } else if (peek() == '/' && peekNext() == '*') {
+                s.push('c');
+                advance();
+                advance();
+            } else {
+                advance();
+            }
+        }
+
+        if (isAtEnd() && !s.empty()) {
+            Lox.error(line, "Unterminated comment.");
         }
     }
 
