@@ -1,4 +1,5 @@
 C:\Users\yuryq\Desktop\Lox\src\com\craftinginterpreters\lox\TokenType.java
+C:\Users\yuryq\Desktop\Lox\src\com\craftinginterpreters\lox\Text.java
 C:\Users\yuryq\Desktop\Lox\src\com\craftinginterpreters\lox\Token.java
 C:\Users\yuryq\Desktop\Lox\src\com\craftinginterpreters\lox\Scanner.java
 C:\Users\yuryq\Desktop\Lox\src\com\craftinginterpreters\lox\Lox.java
