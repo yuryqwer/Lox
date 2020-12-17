@@ -36,6 +36,7 @@ class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
+    private int column = 0;
 
     Scanner(String source) {
         this.source = source;
@@ -108,7 +109,7 @@ class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    Lox.error(line, "Unexpected character.");
+                    Lox.error(line, column, source, "Unexpected character.");
                 }
                 break;
         }
@@ -137,7 +138,7 @@ class Scanner {
         }
 
         if (isAtEnd() && !s.empty()) {
-            Lox.error(line, "Unterminated comment.");
+            Lox.error(line, column, source, "Unterminated comment.");
         }
     }
 
@@ -172,7 +173,7 @@ class Scanner {
 
         // 没有发现第二个双引号就结束，直接报告错误
         if (isAtEnd()) {
-            Lox.error(line, "Unterminated string.");
+            Lox.error(line, column, source, "Unterminated string.");
             return;
         }
 
@@ -193,7 +194,7 @@ class Scanner {
         if (isAtEnd()) return false;
         if (source.charAt(current) != expected) return false;
 
-        current++;
+        advance();
         return true;
     }
 
@@ -243,8 +244,14 @@ class Scanner {
      * @return
      */
     private char advance() {
+        char c = source.charAt(current);
+        if (c == '\n') {
+            column = 0;
+        } else {
+            column++;
+        }
         current++;
-        return source.charAt(current - 1);
+        return c;
     }
 
     /**
