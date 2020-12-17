@@ -1,0 +1,5 @@
+// this is a comment
+a multi-line comment /* like c programming language
+does */ let's see if it works. */
+(( )){} // grouping stuff
+!*+-/=<> <= == // operators
