@@ -74,6 +74,17 @@ public class Lox {
         report(line, column, lineContent, message);
     }
 
+    /**
+     * 错误报告结果的格式如下所示
+     * Error: Unexpected character. 
+     * 
+     *     1 | function(a, b@);
+     *                      ^--Here.
+     * @param line 在源码中的行数
+     * @param column 要报告的位置在该行的列数
+     * @param line_content 行的内容
+     * @param message 错误信息
+     */
     private static void report(int line, 
                                int column, 
                                String line_content, 
@@ -87,8 +98,7 @@ public class Lox {
         int blankspaces = OFFSET.length() + 
                           String.valueOf(line).length() + 
                           SEPARATOR.length() + 
-                          column - 
-                          1;
+                          column;
         for (int i = 0; i < blankspaces; i++) s.append(" ");
         s.append("^--Here.");
         System.err.println(s);

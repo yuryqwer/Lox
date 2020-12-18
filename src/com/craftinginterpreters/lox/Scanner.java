@@ -36,7 +36,8 @@ class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
-    private int column = 0;
+    private int startColumn = 0;
+    private int currentColumn = 0;
 
     Scanner(String source) {
         this.source = source;
@@ -46,10 +47,11 @@ class Scanner {
         while (!isAtEnd()) {
             // We are at the beginning of the next lexeme.
             start = current;
+            startColumn = currentColumn;
             scanToken();
         }
 
-        tokens.add(new Token(EOF, "", null, line));  // 最后自己加一个EOF
+        tokens.add(new Token(EOF, "", null, line, startColumn));  // 最后自己加一个EOF
         return tokens;
     }
 
@@ -109,7 +111,7 @@ class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    Lox.error(line, column, source, "Unexpected character.");
+                    Lox.error(line, startColumn, source, "Unexpected character.");
                 }
                 break;
         }
@@ -138,7 +140,7 @@ class Scanner {
         }
 
         if (isAtEnd() && !s.empty()) {
-            Lox.error(line, column, source, "Unterminated comment.");
+            Lox.error(line, startColumn, source, "Unterminated comment.");
         }
     }
 
@@ -173,7 +175,7 @@ class Scanner {
 
         // 没有发现第二个双引号就结束，直接报告错误
         if (isAtEnd()) {
-            Lox.error(line, column, source, "Unterminated string.");
+            Lox.error(line, startColumn, source, "Unterminated string.");
             return;
         }
 
@@ -246,9 +248,9 @@ class Scanner {
     private char advance() {
         char c = source.charAt(current);
         if (c == '\n') {
-            column = 0;
+            currentColumn = 0;
         } else {
-            column++;
+            currentColumn++;
         }
         current++;
         return c;
@@ -266,6 +268,6 @@ class Scanner {
 
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
-        tokens.add(new Token(type, text, literal, line));
+        tokens.add(new Token(type, text, literal, line, startColumn));
     }
 }
