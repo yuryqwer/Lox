@@ -140,7 +140,7 @@ class Scanner {
         }
 
         if (isAtEnd() && !s.empty()) {
-            Lox.error(line, startColumn, source, "Unterminated comment.");
+            Lox.error(line, startColumn, source, "Unterminated block comments.");
         }
     }
 
